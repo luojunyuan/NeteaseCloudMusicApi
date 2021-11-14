@@ -121,7 +121,8 @@ namespace NeteaseCloudMusicApi {
 			if (options is null)
 				throw new ArgumentNullException(nameof(options));
 
-			var json = await Request.CreateRequest(method.Method, url, data, MergeOptions(options), Cookies);
+			var finalOptions = MergeOptions(options);
+			var json = await Request.CreateRequest(method.Method, url, data, finalOptions, Cookies);
 			if ((int)json["code"] == 301)
 				json["msg"] = "未登录";
 			return json;

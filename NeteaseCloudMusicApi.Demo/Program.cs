@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
+// https://github.com/XiaoMengXinX/Music163Api-Go/blob/v0.1.17/api/eventSend.go#L12
+// 发送图片动态
+
 namespace NeteaseCloudMusicApi.Demo {
 	internal static class Program {
 		private static async Task Main() {
@@ -34,7 +37,7 @@ namespace NeteaseCloudMusicApi.Demo {
 				/******************** 获取账号信息 ********************/
 
 				var json = await api.RequestAsync(CloudMusicApiProviders.LoginStatus);
-				long uid = (long)json["profile"]["userId"];
+				long uid = (long)json["profile"]?["userId"];
 				Console.WriteLine($"账号ID： {uid}");
 				Console.WriteLine($"账号昵称： {json["profile"]["nickname"]}");
 				Console.WriteLine();
@@ -43,14 +46,17 @@ namespace NeteaseCloudMusicApi.Demo {
 
 				/******************** 获取我喜欢的音乐 ********************/
 
-				json = await api.RequestAsync(CloudMusicApiProviders.UserPlaylist, new Dictionary<string, object> { ["uid"] = uid });
-				json = await api.RequestAsync(CloudMusicApiProviders.PlaylistDetail, new Dictionary<string, object> { ["id"] = json["playlist"][0]["id"] });
-				int[] trackIds = json["playlist"]["trackIds"].Select(t => (int)t["id"]).ToArray();
-				json = await api.RequestAsync(CloudMusicApiProviders.SongDetail, new Dictionary<string, object> { ["ids"] = trackIds });
-				Console.WriteLine($"我喜欢的音乐（{trackIds.Length} 首）：");
-				foreach (var song in json["songs"])
-					Console.WriteLine($"{string.Join(",", song["ar"].Select(t => t["name"]))} - {song["name"]}");
-				Console.WriteLine();
+				json = await api.RequestAsync(CloudMusicApiProviders.SendEvent, new Dictionary<string, object>
+					{ ["msg"] = "" });
+				Console.WriteLine("succeed");
+				//json = await api.RequestAsync(CloudMusicApiProviders.UserPlaylist, new Dictionary<string, object> { ["uid"] = uid });
+				//json = await api.RequestAsync(CloudMusicApiProviders.PlaylistDetail, new Dictionary<string, object> { ["id"] = json["playlist"][0]["id"] });
+				//int[] trackIds = json["playlist"]["trackIds"].Select(t => (int)t["id"]).ToArray();
+				//json = await api.RequestAsync(CloudMusicApiProviders.SongDetail, new Dictionary<string, object> { ["ids"] = trackIds });
+				//Console.WriteLine($"我喜欢的音乐（{trackIds.Length} 首）：");
+				//foreach (var song in json["songs"])
+				//	Console.WriteLine($"{string.Join(",", song["ar"].Select(t => t["name"]))} - {song["name"]}");
+				//Console.WriteLine();
 
 				/******************** 获取我喜欢的音乐 ********************/
 
@@ -58,19 +64,19 @@ namespace NeteaseCloudMusicApi.Demo {
 
 				/******************** 获取我的关注 ********************/
 
-				json = await api.RequestAsync(CloudMusicApiProviders.UserFollows, new Dictionary<string, object> { ["uid"] = uid });
-				Console.WriteLine($"我的关注：");
-				foreach (var user in json["follow"])
-					Console.WriteLine(user["nickname"]);
-				Console.WriteLine();
+				//json = await api.RequestAsync(CloudMusicApiProviders.UserFollows, new Dictionary<string, object> { ["uid"] = uid });
+				//Console.WriteLine($"我的关注：");
+				//foreach (var user in json["follow"])
+				//	Console.WriteLine(user["nickname"]);
+				//Console.WriteLine();
 
 				/******************** 获取我的动态 ********************/
 
-				json = await api.RequestAsync(CloudMusicApiProviders.UserEvent, new Dictionary<string, object> { ["uid"] = uid });
-				Console.WriteLine($"我的动态：");
-				foreach (var @event in json["events"])
-					Console.WriteLine(JObject.Parse((string)@event["json"])["msg"]);
-				Console.WriteLine();
+				//json = await api.RequestAsync(CloudMusicApiProviders.UserEvent, new Dictionary<string, object> { ["uid"] = uid });
+				//Console.WriteLine($"我的动态：");
+				//foreach (var @event in json["events"])
+				//	Console.WriteLine(JObject.Parse((string)@event["json"])["msg"]);
+				//Console.WriteLine();
 
 				/******************** 获取我的动态 ********************/
 

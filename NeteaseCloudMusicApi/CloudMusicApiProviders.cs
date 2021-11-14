@@ -968,6 +968,14 @@ namespace NeteaseCloudMusicApi {
 		}, BuildOptions("weapi"));
 
 		/// <summary>
+		/// Share event
+		/// </summary>
+		public static readonly CloudMusicApiProvider SendEvent = new CloudMusicApiProvider("/sendevent", HttpMethod.Post, "https://interface.music.163.com/eapi/share/friends/resource", new ParameterInfo[] {
+			new ParameterInfo("msg", ParameterType.Required, string.Empty),
+			new ParameterInfo("type", ParameterType.Constant, "noresource"),
+		}, BuildOptions("eapi", null, "pc", "/api/share/friends/resource"));
+
+		/// <summary>
 		/// 获取相似歌手
 		/// </summary>
 		public static readonly CloudMusicApiProvider SimiArtist = new CloudMusicApiProvider("/simi/artist", HttpMethod.Post, "https://music.163.com/weapi/discovery/simiArtist", new ParameterInfo[] {
